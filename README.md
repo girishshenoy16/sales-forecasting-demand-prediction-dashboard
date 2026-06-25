@@ -20,8 +20,6 @@ Executive-grade Business Intelligence dashboard built with Python, ETL pipelines
 
 # 🌐 Live Demo
 
-# 🌐 Live Demo
-
 [![Live Dashboard](https://img.shields.io/badge/Launch-Live%20Dashboard-success?style=for-the-badge)](https://girishshenoy16.github.io/sales-forecasting-demand-prediction-dashboard/)
 
 ---
