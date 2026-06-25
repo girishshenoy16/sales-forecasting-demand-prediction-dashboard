@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Forecasting & Demand Prediction — CEO Executive Dashboard</title>
+<meta name="description" content="Boardroom-grade executive dashboard for Myntra leadership. Real-time sales forecasting, demand intelligence, and inventory risk management. FY 2021–2025.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DASHBOARD HEADER
+     ═══════════════════════════════════════════════════════════ -->
+<header class="dash-header">
+  <!-- ROW 1 (Executive Identity Bar) -->
+  <div class="dash-header-top">
+    <div class="dash-header-left">
+      <div class="dash-logo">
+        <span class="logo-mark">M</span>
+      </div>
+      <div class="dash-title-block">
+        <div class="dash-title-row">
+          <h1 class="dash-title">Sales Forecasting &amp; Demand Intelligence</h1>
+          <span class="dash-title-sep">|</span>
+          <p class="dash-subtitle">Executive Dashboard &nbsp;·&nbsp; FY 2021–2025</p>
+          <span class="dash-title-sep">|</span>
+          <span id="header-health-status" class="header-health-badge health-stable">🟢 Business Stable</span>
+        </div>
+      </div>
+    </div>
+    <div class="dash-header-right">
+      <div class="timestamp-box">
+        <span class="timestamp-value" id="live-time">Last Updated: Wed, 24 Jun 2026 • 02:37 PM</span>
+      </div>
+    </div>
+  </div>
+  <br>
+  <!-- ROW 2 (Compact Filter Bar) -->
+  <div class="dash-header-bottom">
+    <div class="filter-bar">
+      <div class="filter-group">
+        <span class="filter-group-label">🌍 Region:</span>
+        <select id="filter-region" class="filter-select">
+          <option value="">All Regions</option>
+          <option value="North">North</option>
+          <option value="South">South</option>
+          <option value="East">East</option>
+          <option value="West">West</option>
+          <option value="Central">Central</option>
+        </select>
+      </div>
+      
+      <div class="filter-separator"></div>
+
+      <div class="filter-group">
+        <span class="filter-group-label">📦 Category:</span>
+        <select id="filter-cat" class="filter-select">
+          <option value="">All Categories</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Home &amp; Kitchen">Home</option>
+          <option value="Beauty &amp; Personal Care">Beauty</option>
+          <option value="Sports &amp; Outdoors">Sports</option>
+        </select>
+      </div>
+
+      <div class="actions-group">
+        <button class="btn-clear" id="clear-filters">🧹 Clear Filters</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ROW 3 (Data Scope Bar) -->
+<div class="exec-status-bar" id="filter-status">
+  <span class="status-bar-item">
+    <span class="status-bar-icon">📊</span>
+    <span class="status-bar-val" id="scope-readout">105,000</span> Transactions
+  </span>
+  <span class="status-bar-bullet">•</span>
+  <span class="status-bar-item">
+    <span class="status-bar-icon">📅</span>
+    Period: <span class="status-bar-val">Jan 2021 – Dec 2025</span>
+  </span>
+  <span class="status-bar-bullet">•</span>
+  <span class="status-bar-item">
+    <span class="status-bar-icon">🔄</span>
+    Last Refresh: <span class="status-bar-val" id="refresh-readout">—</span>
+  </span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 1 — EXECUTIVE PERFORMANCE COMMAND CENTER
+     ═══════════════════════════════════════════════════════════ -->
+<section class="row row-command-center" aria-label="Executive Performance Command Center">
+  <div class="command-center-inner">
+    <div class="command-center-header">
+      <span class="section-tag">EXECUTIVE PERFORMANCE OVERVIEW</span>
+      <h2 class="command-center-title">Real-Time Business Health Command Center</h2>
+    </div>
+
+    <div class="kpi-grid">
+
+      <!-- Card 1: Revenue (Primary) -->
+      <div class="kpi-card kpi-card-primary status-healthy" id="kpi-card-revenue">
+        <div class="kpi-header-zone">
+          <span class="kpi-label">Revenue</span>
+        </div>
+        <div class="kpi-status-zone">
+          <span class="status-badge badge-green" id="kpi-revenue-badge">🟢 Healthy</span>
+        </div>
+        <div class="kpi-value-zone">
+          <strong class="kpi-value" id="kpi-revenue">—</strong>
+        </div>
+        <div class="kpi-trend-zone">
+          <span class="kpi-trend trend-up">▲ +12.4% Year-On-Year</span>
+        </div>
+        <div class="kpi-desc-zone">
+          <span class="kpi-sub" id="kpi-orders-sub">— transactions</span>
+        </div>
+        <div class="kpi-footer-zone">
+          <div class="kpi-bar-wrap">
+            <div class="kpi-bar kpi-bar-healthy" id="kpi-bar-revenue" style="width: 98%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Forecast Revenue (Secondary) -->
+      <div class="kpi-card kpi-card-secondary status-healthy" id="kpi-card-forecast">
+        <div class="kpi-header-zone">
+          <span class="kpi-label">Forecast Revenue</span>
+        </div>
+        <div class="kpi-status-zone">
+          <span class="status-badge badge-green">🟢 Projection</span>
+        </div>
+        <div class="kpi-value-zone">
+          <strong class="kpi-value" id="kpi-forecast">—</strong>
+        </div>
+        <div class="kpi-trend-zone">
+          <span class="kpi-trend trend-neutral">Target</span>
+        </div>
+        <div class="kpi-desc-zone">
+          <span class="kpi-sub">Next-period demand model</span>
+        </div>
+        <div class="kpi-footer-zone">
+          <div class="kpi-bar-wrap">
+            <div class="kpi-bar kpi-bar-healthy" id="kpi-bar-forecast" style="width: 100%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Forecast Accuracy (Primary) -->
+      <div class="kpi-card kpi-card-primary status-monitor" id="kpi-card-accuracy">
+        <div class="kpi-header-zone">
+          <span class="kpi-label">Forecast Accuracy</span>
+        </div>
+        <div class="kpi-status-zone">
+          <span class="status-badge" id="kpi-accuracy-badge">🟡 Monitor</span>
+        </div>
+        <div class="kpi-value-zone">
+          <strong class="kpi-value" id="kpi-accuracy">—</strong>
+        </div>
+        <div class="kpi-trend-zone">
+          <span class="kpi-trend trend-up" id="kpi-accuracy-trend">▲ +2.1 pts vs prev</span>
+        </div>
+        <div class="kpi-desc-zone">
+          <span class="kpi-sub" id="kpi-accuracy-sub">— MAPE error</span>
+        </div>
+        <div class="kpi-footer-zone">
+          <div class="kpi-bar-wrap">
+            <div class="kpi-bar" id="kpi-bar-accuracy"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Inventory Health (Secondary) -->
+      <div class="kpi-card kpi-card-secondary status-critical" id="kpi-card-inventory">
+        <div class="kpi-header-zone">
+          <span class="kpi-label">Inventory Health</span>
+        </div>
+        <div class="kpi-status-zone">
+          <span class="status-badge badge-red" id="kpi-inventory-badge">🔴 Critical</span>
+        </div>
+        <div class="kpi-value-zone">
+          <strong class="kpi-value" id="kpi-inv-health">—</strong>
+        </div>
+        <div class="kpi-trend-zone">
+          <span class="kpi-trend trend-down">▼ -8.4 pts</span>
+        </div>
+        <div class="kpi-desc-zone">
+          <span class="kpi-sub">Of demand adequately stocked</span>
+        </div>
+        <div class="kpi-footer-zone">
+          <div class="kpi-bar-wrap">
+            <div class="kpi-bar kpi-bar-critical" id="kpi-bar-inventory"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5: Marketing ROI (Secondary) -->
+      <div class="kpi-card kpi-card-secondary status-healthy" id="kpi-card-marketing">
+        <div class="kpi-header-zone">
+          <span class="kpi-label">Marketing ROI</span>
+        </div>
+        <div class="kpi-status-zone">
+          <span class="status-badge badge-green">🟢 Healthy</span>
+        </div>
+        <div class="kpi-value-zone">
+          <strong class="kpi-value" id="kpi-mkt">—</strong>
+        </div>
+        <div class="kpi-trend-zone">
+          <span class="kpi-trend trend-up">▲ +3.2x Year-On-Year</span>
+        </div>
+        <div class="kpi-desc-zone">
+          <span class="kpi-sub" id="kpi-mkt-roi">— efficiency</span>
+        </div>
+        <div class="kpi-footer-zone">
+          <div class="kpi-bar-wrap">
+            <div class="kpi-bar kpi-bar-healthy" id="kpi-bar-marketing"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6: Business Health Score (Hero KPI Card) -->
+      <div class="kpi-card kpi-card-hero status-monitor" id="kpi-card-health">
+        <div class="kpi-header-zone">
+          <span class="kpi-label hero-label">Business Health Score</span>
+        </div>
+        <div class="kpi-status-zone">
+          <span class="status-badge" id="kpi-health-badge">🟠 Monitor</span>
+        </div>
+        <div class="kpi-value-zone">
+          <strong class="kpi-value" id="kpi-health">—</strong>
+        </div>
+        <div class="kpi-trend-zone">
+          <span class="kpi-trend trend-up-hero">▲ +5 points</span>
+        </div>
+        <div class="kpi-desc-zone">
+          <span class="kpi-sub hero-sub" id="kpi-health-sub">Composite performance score</span>
+        </div>
+        <div class="kpi-footer-zone">
+          <div class="kpi-bar-wrap hero-bar-wrap">
+            <div class="kpi-bar kpi-bar-hero" id="health-bar"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Executive Summary Strip -->
+    <div class="kpi-summary-strip" id="kpi-summary-strip"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 2 — CEO EXECUTIVE BRIEFING (2 panels)
+     ═══════════════════════════════════════════════════════════ -->
+<section class="row row-2col row-briefing" aria-label="CEO Briefing">
+  <!-- LEFT: Executive Summary -->
+  <div class="exec-card exec-summary">
+    <div class="exec-card-header">
+      <span class="section-tag">EXECUTIVE SUMMARY</span>
+      <h2 class="section-title">Business Intelligence Overview</h2>
+    </div>
+
+    <!-- Dominant Executive Conclusion -->
+    <div class="conclusion-banner">
+      <div class="conclusion-title">🎯 Executive Summary</div>
+      <p class="conclusion-lead" id="exec-summary-lead">Demand growth is exceeding inventory readiness.</p>
+      <p class="conclusion-actions" id="exec-summary-actions">Immediate actions required: <strong>Replenish high-demand SKUs</strong> &nbsp;·&nbsp; <strong>Recalibrate forecasting model</strong></p>
+    </div>
+    <br>
+
+    <!-- 2x2 Grid of Compact Insight Cards -->
+    <div class="insight-grid">
+      <!-- Card 1: Stockout Risk -->
+      <div class="insight-card card-red">
+        <span class="insight-card-tag text-red">🔴 Stockout Risk</span>
+        <div class="insight-card-val-sm" id="insight-stockout-val">High-Demand</div>
+        <br>
+        <div class="insight-card-lbl">SKUs approaching critical thresholds</div>
+        <span class="insight-card-status text-red" id="insight-stockout-status">Status: Critical</span>
+      </div>
+
+      <!-- Card 2: Forecast Bias -->
+      <div class="insight-card card-amber">
+        <span class="insight-card-tag text-amber">🟠 Forecast Bias</span>
+        <div class="insight-card-val" id="summary-over-pct">59.6%</div>
+        <br>
+        <div class="insight-card-lbl">Orders over-forecasted (Over-Forecast Rate)</div>
+        <span class="insight-card-status text-amber">Status: Monitor</span>
+      </div>
+
+      <!-- Card 3: Seasonal Opportunity -->
+      <div class="insight-card card-green">
+        <span class="insight-card-tag text-green">🟢 Seasonality</span>
+        <div class="insight-card-val-sm" id="insight-season-val">Autumn Peak</div>
+        <br>
+        <div class="insight-card-lbl" id="insight-season-lbl">Generates highest seasonal demand</div>
+        <span class="insight-card-status text-green" id="insight-season-status">Status: Growth Opportunity</span>
+      </div>
+
+      <!-- Card 4: Regional Opportunity -->
+      <div class="insight-card card-green">
+        <span class="insight-card-tag text-green">🟢 Expansion</span>
+        <div class="insight-card-val" id="insight-expansion-val">10%</div>
+        <br>
+        <div class="insight-card-lbl" id="insight-expansion-lbl">Central Region Revenue Share (Largest Untapped Market)</div>
+        <span class="insight-card-status text-green" id="insight-expansion-status">Status: Expansion Potential</span>
+      </div>
+    </div>
+    <br>
+
+    <!-- Executive Action Footer -->
+    <div class="exec-action-footer">
+      <span class="action-footer-title">Recommended Actions:</span>
+      <div class="action-footer-items" id="exec-summary-actions-list">
+        <span class="action-footer-item">✓ Replenish High-Demand SKUs</span>
+        <span class="action-footer-item">✓ Adjust Forecast Model</span>
+        <span class="action-footer-item">✓ Increase Autumn Inventory Build</span>
+        <span class="action-footer-item">✓ Expand Central Region Coverage</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Action Center -->
+  <div class="exec-card exec-actions">
+    <div class="exec-card-header">
+      <span class="section-tag">ACTION CENTER</span>
+      <h2 class="section-title">What Needs Action Today?</h2>
+    </div>
+    <div class="action-list" id="action-list-container">
+      <!-- Dynamic Action Cards populated by app.js -->
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 3 — BUSINESS PERFORMANCE (70/30 split)
+     ═══════════════════════════════════════════════════════════ -->
+<section class="row row-70-30 row-perf" aria-label="Business Performance">
+
+  <!-- LEFT 70%: Revenue Trend -->
+  <div class="panel-card panel-large">
+    <div class="panel-header">
+      <div>
+        <span class="section-tag">PERFORMANCE TREND</span>
+        <h2 class="section-title">Annual Revenue — Is This Growth?</h2>
+      </div>
+    </div>
+    <div class="conclusion-bar conclusion-amber">
+      <span>🟡</span>
+      <span id="trend-conclusion">Revenue growth has remained largely flat (+1.3% CAGR). A demand generation strategy is required to break the plateau.</span>
+    </div>
+    <br>
+    <canvas id="chart-trend" class="chart-lg"></canvas>
+  </div>
+
+  <!-- RIGHT 30%: Forecast Risk Summary -->
+  <div class="panel-card panel-sm">
+    <div class="panel-header">
+      <span class="section-tag">FORECAST INTELLIGENCE</span>
+      <h2 class="section-title">Forecast Risk Summary</h2>
+    </div>
+    <div class="conclusion-bar conclusion-amber">
+      <span>🟡</span>
+      <span>Model exhibits systematic over-forecast bias.</span>
+    </div>
+    <br>
+
+    <div class="forecast-kpis">
+      <div class="fkpi fkpi-red">
+        <span class="fkpi-label">Over-Forecast</span>
+        <strong class="fkpi-value" id="fkpi-over">—</strong>
+        <span class="fkpi-desc">Excess inventory risk</span>
+      </div>
+      <div class="fkpi fkpi-slate">
+        <span class="fkpi-label">Under-Forecast</span>
+        <strong class="fkpi-value" id="fkpi-under">—</strong>
+        <span class="fkpi-desc">Stockout &amp; lost revenue risk</span>
+      </div>
+      <div class="fkpi fkpi-amber">
+        <span class="fkpi-label">Forecast Error</span>
+        <strong class="fkpi-value" id="fkpi-error">—</strong>
+        <span class="fkpi-desc">Weighted MAPE</span>
+      </div>
+    </div>
+
+    <br>
+    <div class="forecast-status" id="forecast-status" style="margin-bottom: 4px;">
+      <span class="fstatus-icon">🟠</span>
+      <div>
+        <strong>Needs Calibration</strong>
+        <p>Q4 multiplier absent. Introduce seasonal adjustments to reduce bias.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 4 — INVENTORY INTELLIGENCE (50/50)
+     ═══════════════════════════════════════════════════════════ -->
+<section class="row row-50-50 row-inv" aria-label="Inventory Intelligence">
+
+  <!-- LEFT: Inventory chart -->
+  <div class="panel-card">
+    <div class="panel-header">
+      <div>
+        <span class="section-tag">INVENTORY RISK</span>
+        <h2 class="section-title">Stock Levels vs. Demand Pressure</h2>
+      </div>
+    </div>
+    <div class="conclusion-bar conclusion-red">
+      <span>🔴</span>
+      <span>Demand is growing faster than inventory buffers. High-demand products carry the same buffer as Medium — a critical planning gap.</span>
+    </div>
+    <canvas id="chart-stock-demand" class="chart-md"></canvas>
+
+    <!-- Shelf visual below chart -->
+    <div class="shelf-section">
+      <p class="shelf-title">Product Shelf Health — hover for detail</p>
+      <br>
+      <div class="shelf-wrap" id="shelf-wrap"></div>
+      <div class="shelf-legend">
+        <span><i class="swatch swatch-good"></i> Well stocked (&gt;80)</span>
+        <span><i class="swatch swatch-caution"></i> Thinning (50–80)</span>
+        <span><i class="swatch swatch-risk"></i> Critical (&lt;50)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Inventory Insights -->
+  <div class="panel-card panel-insights">
+    <div class="panel-header">
+      <span class="section-tag">INVENTORY INSIGHTS</span>
+      <h2 class="section-title">Critical Inventory Alerts</h2>
+    </div>
+    <div class="inv-summary-grid">
+      <div class="inv-stat inv-stat-red">
+        <span class="inv-stat-label">Stockout Risk Level</span>
+        <strong class="inv-stat-value">High</strong>
+      </div>
+      <div class="inv-stat inv-stat-amber">
+        <span class="inv-stat-label">Est. Revenue at Risk</span>
+        <strong class="inv-stat-value" id="inv-rev-risk">₹2.1Cr</strong>
+      </div>
+      <div class="inv-stat inv-stat-green">
+        <span class="inv-stat-label">Avg Stock on Hand</span>
+        <strong class="inv-stat-value" id="inv-avg-stock">—</strong>
+      </div>
+      <div class="inv-stat inv-stat-slate">
+        <span class="inv-stat-label">Overstocked Units Value</span>
+        <strong class="inv-stat-value">₹18.5L</strong>
+      </div>
+    </div>
+    <br>
+    <h4 class="insight-sub-title">🔴 Critical SKUs Requiring Immediate Replenishment</h4>
+    <div class="critical-skus" id="critical-skus">
+      <div class="sku-row">
+        <span class="sku-name">Laptop</span>
+        <span class="sku-region">North · West</span>
+        <span class="sku-badge badge-critical">CRITICAL</span>
+      </div>
+      <div class="sku-row">
+        <span class="sku-name">Wireless Headphones</span>
+        <span class="sku-region">North · East</span>
+        <span class="sku-badge badge-critical">CRITICAL</span>
+      </div>
+    </div>
+
+    <h4 class="insight-sub-title" style="margin-top:14px;">🟢 Overstocked SKUs — Capital Release Opportunity</h4>
+    <div class="critical-skus">
+      <div class="sku-row">
+        <span class="sku-name">Mountain Bike</span>
+        <span class="sku-region">Central</span>
+        <span class="sku-badge badge-overstock">OVERSTOCK</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 5 — CATEGORY & REGION INTELLIGENCE (50/50)
+     ═══════════════════════════════════════════════════════════ -->
+<section class="row row-50-50 row-cat-reg" aria-label="Category and Region Intelligence">
+
+  <!-- LEFT: Revenue Mix by Category -->
+  <div class="panel-card" id="card-revenue-mix">
+    <div class="panel-header">
+      <div>
+        <span class="section-tag">REVENUE MIX</span>
+        <h2 class="section-title">Revenue by Product Category</h2>
+      </div>
+    </div>
+    <div class="conclusion-bar conclusion-slate">
+      <span>ℹ</span>
+      <div class="conclusion-bar-body">
+        <div>🏆 <strong>Electronics</strong> is the largest revenue contributor.</div>
+        <div style="margin-top: 4px;">⚠ Top 3 categories contribute <strong>~72%</strong> of total revenue, indicating moderate concentration risk.</div>
+      </div>
+    </div>
+    <div class="donut-wrap">
+      <canvas id="chart-category"></canvas>
+      <div class="donut-legend" id="donut-legend"></div>
+    </div>
+    <div class="category-footer">
+      <div class="cat-footer-block">
+        <span class="cat-footer-title">Concentration Risk</span>
+        <span class="cat-footer-desc">Top 3 categories contribute 72% of revenue</span>
+      </div>
+      <div class="cat-footer-badge">
+        <span class="risk-pill pill-yellow">🟡 Moderate Risk</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Regional Snapshot -->
+  <div class="panel-card">
+    <div class="panel-header">
+      <span class="section-tag">REGIONAL SNAPSHOT</span>
+      <h2 class="section-title">Regional Performance Intelligence</h2>
+    </div>
+    <div class="conclusion-bar conclusion-amber">
+      <span>🟡</span>
+      <span>Stock gap is uniform across all 5 regions — a systemic policy failure, not a regional anomaly.</span>
+    </div>
+    <br>
+    <div class="region-tiles" id="region-tiles">
+      <div class="region-tile rt-gold">
+        <span class="rt-icon">🏆</span>
+        <div class="rt-body">
+          <span class="rt-label">Best Performing Region</span>
+          <strong id="rt-best">—</strong>
+          <span id="rt-best-val" class="rt-val">—</span>
+        </div>
+      </div>
+      <div class="region-tile rt-red">
+        <span class="rt-icon">⚠</span>
+        <div class="rt-body">
+          <span class="rt-label">Weakest Region</span>
+          <strong id="rt-weak">—</strong>
+          <span id="rt-weak-val" class="rt-val">—</span>
+        </div>
+      </div>
+      <div class="region-tile rt-blue">
+        <span class="rt-icon">📈</span>
+        <div class="rt-body">
+          <span class="rt-label">Highest Opportunity</span>
+          <strong id="rt-opp">Central</strong>
+          <span class="rt-val">Only 10% share — underpenetrated</span>
+        </div>
+      </div>
+      <div class="region-tile rt-green">
+        <span class="rt-icon">🔥</span>
+        <div class="rt-body">
+          <span class="rt-label">Highest Demand</span>
+          <strong id="rt-demand">—</strong>
+          <span id="rt-demand-val" class="rt-val">—</span>
+        </div>
+      </div>
+    </div>
+    <br>
+    <canvas id="chart-region" class="chart-sm-region" style="margin-top:16px;"></canvas>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 6 — SEASONAL & PRODUCT INSIGHTS (50/50)
+     ═══════════════════════════════════════════════════════════ -->
+<section class="row row-50-50 row-seasonal" aria-label="Seasonal and Product Insights">
+
+  <!-- LEFT: Seasonal Demand -->
+  <div class="panel-card">
+    <div class="panel-header">
+      <div>
+        <span class="section-tag">SEASONAL DEMAND</span>
+        <h2 class="section-title">Which Season Earns Its Keep?</h2>
+      </div>
+    </div>
+    <div class="conclusion-bar conclusion-slate">
+      <span>ℹ</span>
+      <span>Summer + Autumn generate over 54% of annual revenue. Pre-season inventory build must begin by June–July.</span>
+    </div>
+    <br>
+    <canvas id="chart-season" class="chart-md"></canvas>
+  </div>
+
+  <!-- RIGHT: Revenue Concentration Risk -->
+  <div class="panel-card">
+    <div class="panel-header">
+      <div>
+        <span class="section-tag">REVENUE CONCENTRATION RISK</span>
+        <h2 class="section-title">Top Products — Concentration Alert</h2>
+      </div>
+    </div>
+    <div class="conclusion-bar conclusion-amber">
+      <span>🟡</span>
+      <span>Top 2 products generate &gt;20% of total revenue. Single-SKU supply disruption creates systemic revenue risk.</span>
+    </div>
+    <br>
+    <canvas id="chart-products" class="chart-md"></canvas>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ROW 7 — OPERATIONAL DETAILS (Collapsible)
+     ═══════════════════════════════════════════════════════════ -->
+<section class="row row-operational" aria-label="Operational Details">
+  <div class="panel-card" style="flex: 1; width: 100%;">
+    <div class="panel-header">
+      <div>
+        <span class="section-tag">OPERATIONAL DETAILS</span>
+        <h2 class="section-title">Top Cities by Revenue</h2>
+      </div>
+    </div>
+    <div class="conclusion-bar conclusion-green">
+      <span>🟢</span>
+      <div class="conclusion-bar-body">
+        <div><strong>No geographic concentration risk detected.</strong> Top 5 cities contribute balanced revenue share.</div>
+        <div style="margin-top: 4px;">🎯 Expansion Opportunity: <strong>Seattle</strong> &nbsp;·&nbsp; 📈 Growth Potential: <strong>Philadelphia</strong></div>
+      </div>
+    </div>
+    <div class="chart-cities-wrap">
+      <canvas id="chart-cities"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════════════ -->
+<script src="js/app.js"></script>
+</body>
+</html>
